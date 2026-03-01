@@ -337,7 +337,7 @@ fun OverviewCard(
                     color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
                 )
                 Text(
-                    text = "â‚¹${numberFormat.format(totalDue)}",
+                    text = "₹${numberFormat.format(totalDue)}",
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -394,7 +394,7 @@ fun CardItem(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "${card.bankName.uppercase()} ${if (card.cardNumberLast4.isNotEmpty()) "â€¢ ${card.cardNumberLast4}" else ""}",
+                        text = "${card.bankName.uppercase()} ${if (card.cardNumberLast4.isNotEmpty()) "• ${card.cardNumberLast4}" else ""}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                     )
@@ -460,7 +460,7 @@ fun CardItem(
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
                         Text(
-                            text = "â‚¹${numberFormat.format(card.totalDue)}",
+                            text = "₹${numberFormat.format(card.totalDue)}",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onSurface
@@ -475,7 +475,7 @@ fun CardItem(
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
                         Text(
-                            text = "â‚¹${numberFormat.format(card.remainingDue)}",
+                            text = "₹${numberFormat.format(card.remainingDue)}",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             color = if (card.remainingDue <= 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
@@ -484,8 +484,19 @@ fun CardItem(
                 }
 
                 // Right Column: Due Date & Action
-                val currentDate = System.currentTimeMillis()
-                val diffInMillis = card.dueDate - currentDate
+                val getStartOfDay = { timeInMillis: Long ->
+                    val calendar = java.util.Calendar.getInstance()
+                    calendar.timeInMillis = timeInMillis
+                    calendar.set(java.util.Calendar.HOUR_OF_DAY, 0)
+                    calendar.set(java.util.Calendar.MINUTE, 0)
+                    calendar.set(java.util.Calendar.SECOND, 0)
+                    calendar.set(java.util.Calendar.MILLISECOND, 0)
+                    calendar.timeInMillis
+                }
+
+                val normalizedCurrentDate = getStartOfDay(System.currentTimeMillis())
+                val normalizedDueDate = getStartOfDay(card.dueDate)
+                val diffInMillis = normalizedDueDate - normalizedCurrentDate
                 val daysRemaining = java.util.concurrent.TimeUnit.MILLISECONDS.toDays(diffInMillis)
                 val isOverdue = diffInMillis < 0
                 val isNearDue = !isOverdue && daysRemaining <= 3
