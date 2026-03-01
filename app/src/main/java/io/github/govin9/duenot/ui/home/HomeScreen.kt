@@ -68,6 +68,11 @@ import java.util.Date
 import java.util.Locale
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.FilterChip
+
+enum class SortOption { DEFAULT, AZ, HIGHEST_DUE }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -139,6 +144,7 @@ fun HomeScreen(
 
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
+    var sortOption by remember { mutableStateOf(SortOption.DEFAULT) }
 
     val filteredCards = if (searchQuery.isBlank()) {
         cards
@@ -272,6 +278,12 @@ fun HomeScreen(
             val totalRemainingDue = filteredCards.sumOf { it.remainingDue }
             val cardsWithDue = filteredCards.count { it.remainingDue > 0 }
 
+            val sortedCards = when (sortOption) {
+                SortOption.DEFAULT -> filteredCards
+                SortOption.AZ -> filteredCards.sortedBy { it.name.lowercase() }
+                SortOption.HIGHEST_DUE -> filteredCards.sortedByDescending { it.remainingDue }
+            }
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -286,7 +298,32 @@ fun HomeScreen(
                             .padding(16.dp)
                     )
                 }
-                items(filteredCards) { card ->
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 0.dp)
+                            .horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        FilterChip(
+                            selected = sortOption == SortOption.DEFAULT,
+                            onClick = { sortOption = SortOption.DEFAULT },
+                            label = { Text("Default") }
+                        )
+                        FilterChip(
+                            selected = sortOption == SortOption.AZ,
+                            onClick = { sortOption = SortOption.AZ },
+                            label = { Text("A-Z") }
+                        )
+                        FilterChip(
+                            selected = sortOption == SortOption.HIGHEST_DUE,
+                            onClick = { sortOption = SortOption.HIGHEST_DUE },
+                            label = { Text("Highest Due") }
+                        )
+                    }
+                }
+                items(sortedCards) { card ->
                     Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
                         CardItem(
                             card = card,

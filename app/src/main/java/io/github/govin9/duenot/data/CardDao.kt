@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CardDao {
-    @Query("SELECT * FROM cards")
+    @Query("SELECT * FROM cards ORDER BY dueDate ASC")
     fun getAllCards(): Flow<List<Card>>
 
     @Query("SELECT * FROM cards WHERE id = :id")
