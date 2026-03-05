@@ -72,7 +72,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.FilterChip
 
-enum class SortOption { DEFAULT, AZ, HIGHEST_DUE }
+enum class FilterOption { ALL, PAID, OVERDUE, NEW_CARDS, HIGHEST_DUE }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -144,7 +144,7 @@ fun HomeScreen(
 
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
-    var sortOption by remember { mutableStateOf(SortOption.DEFAULT) }
+    var filterOption by remember { mutableStateOf(FilterOption.ALL) }
 
     val filteredCards = if (searchQuery.isBlank()) {
         cards
@@ -278,10 +278,28 @@ fun HomeScreen(
             val totalRemainingDue = filteredCards.sumOf { it.remainingDue }
             val cardsWithDue = filteredCards.count { it.remainingDue > 0 }
 
-            val sortedCards = when (sortOption) {
-                SortOption.DEFAULT -> filteredCards
-                SortOption.AZ -> filteredCards.sortedBy { it.name.lowercase() }
-                SortOption.HIGHEST_DUE -> filteredCards.sortedByDescending { it.remainingDue }
+            val getStartOfDay = { timeInMillis: Long ->
+                val calendar = java.util.Calendar.getInstance()
+                calendar.timeInMillis = timeInMillis
+                calendar.set(java.util.Calendar.HOUR_OF_DAY, 0)
+                calendar.set(java.util.Calendar.MINUTE, 0)
+                calendar.set(java.util.Calendar.SECOND, 0)
+                calendar.set(java.util.Calendar.MILLISECOND, 0)
+                calendar.timeInMillis
+            }
+            
+            val isOverdue: (Long) -> Boolean = { dueDate ->
+                val normalizedCurrentDate = getStartOfDay(System.currentTimeMillis())
+                val normalizedDueDate = getStartOfDay(dueDate)
+                (normalizedDueDate - normalizedCurrentDate) < 0
+            }
+
+            val sortedCards = when (filterOption) {
+                FilterOption.ALL -> filteredCards
+                FilterOption.PAID -> filteredCards.filter { it.remainingDue <= 0 }
+                FilterOption.OVERDUE -> filteredCards.filter { it.remainingDue > 0 && isOverdue(it.dueDate) }
+                FilterOption.NEW_CARDS -> filteredCards.sortedByDescending { it.id }
+                FilterOption.HIGHEST_DUE -> filteredCards.sortedByDescending { it.remainingDue }
             }
 
             LazyColumn(
@@ -307,18 +325,28 @@ fun HomeScreen(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         FilterChip(
-                            selected = sortOption == SortOption.DEFAULT,
-                            onClick = { sortOption = SortOption.DEFAULT },
-                            label = { Text("Default") }
+                            selected = filterOption == FilterOption.ALL,
+                            onClick = { filterOption = FilterOption.ALL },
+                            label = { Text("All") }
                         )
                         FilterChip(
-                            selected = sortOption == SortOption.AZ,
-                            onClick = { sortOption = SortOption.AZ },
-                            label = { Text("A-Z") }
+                            selected = filterOption == FilterOption.PAID,
+                            onClick = { filterOption = FilterOption.PAID },
+                            label = { Text("Paid") }
                         )
                         FilterChip(
-                            selected = sortOption == SortOption.HIGHEST_DUE,
-                            onClick = { sortOption = SortOption.HIGHEST_DUE },
+                            selected = filterOption == FilterOption.OVERDUE,
+                            onClick = { filterOption = FilterOption.OVERDUE },
+                            label = { Text("Overdue") }
+                        )
+                        FilterChip(
+                            selected = filterOption == FilterOption.NEW_CARDS,
+                            onClick = { filterOption = FilterOption.NEW_CARDS },
+                            label = { Text("New Cards") }
+                        )
+                        FilterChip(
+                            selected = filterOption == FilterOption.HIGHEST_DUE,
+                            onClick = { filterOption = FilterOption.HIGHEST_DUE },
                             label = { Text("Highest Due") }
                         )
                     }
