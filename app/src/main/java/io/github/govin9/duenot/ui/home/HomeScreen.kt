@@ -328,27 +328,47 @@ fun HomeScreen(
                         FilterChip(
                             selected = filterOption == FilterOption.ALL,
                             onClick = { filterOption = FilterOption.ALL },
-                            label = { Text("All") }
+                            label = { Text("All") },
+                            colors = androidx.compose.material3.FilterChipDefaults.filterChipColors(
+                                selectedContainerColor = MaterialTheme.colorScheme.secondary,
+                                selectedLabelColor = MaterialTheme.colorScheme.primary
+                            )
                         )
                         FilterChip(
                             selected = filterOption == FilterOption.PAID,
                             onClick = { filterOption = FilterOption.PAID },
-                            label = { Text("Paid") }
+                            label = { Text("Paid") },
+                            colors = androidx.compose.material3.FilterChipDefaults.filterChipColors(
+                                selectedContainerColor = MaterialTheme.colorScheme.secondary,
+                                selectedLabelColor = MaterialTheme.colorScheme.primary
+                            )
                         )
                         FilterChip(
                             selected = filterOption == FilterOption.OVERDUE,
                             onClick = { filterOption = FilterOption.OVERDUE },
-                            label = { Text("Overdue") }
+                            label = { Text("Overdue") },
+                            colors = androidx.compose.material3.FilterChipDefaults.filterChipColors(
+                                selectedContainerColor = MaterialTheme.colorScheme.secondary,
+                                selectedLabelColor = MaterialTheme.colorScheme.primary
+                            )
                         )
                         FilterChip(
                             selected = filterOption == FilterOption.NEW_CARDS,
                             onClick = { filterOption = FilterOption.NEW_CARDS },
-                            label = { Text("New Cards") }
+                            label = { Text("New Cards") },
+                            colors = androidx.compose.material3.FilterChipDefaults.filterChipColors(
+                                selectedContainerColor = MaterialTheme.colorScheme.secondary,
+                                selectedLabelColor = MaterialTheme.colorScheme.primary
+                            )
                         )
                         FilterChip(
                             selected = filterOption == FilterOption.HIGHEST_DUE,
                             onClick = { filterOption = FilterOption.HIGHEST_DUE },
-                            label = { Text("Highest Due") }
+                            label = { Text("Highest Due") },
+                            colors = androidx.compose.material3.FilterChipDefaults.filterChipColors(
+                                selectedContainerColor = MaterialTheme.colorScheme.secondary,
+                                selectedLabelColor = MaterialTheme.colorScheme.primary
+                            )
                         )
                     }
                 }
