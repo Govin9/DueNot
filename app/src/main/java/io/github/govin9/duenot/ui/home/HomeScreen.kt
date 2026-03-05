@@ -45,6 +45,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -516,19 +517,22 @@ fun CardItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Left Column: Amounts
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
                     // Total Bill
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             text = "Total: ",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                         )
                         Text(
                             text = "₹${numberFormat.format(card.totalDue)}",
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onSurface
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                         )
                     }
 
@@ -537,13 +541,32 @@ fun CardItem(
                         Text(
                             text = "Remaining: ",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                         )
+                        val remainingColor = if (card.remainingDue <= 0) 
+                            MaterialTheme.colorScheme.primary 
+                        else 
+                            MaterialTheme.colorScheme.onSurface // Semantic correction: Neutral for debt
+                        
                         Text(
                             text = "₹${numberFormat.format(card.remainingDue)}",
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = if (card.remainingDue <= 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                            fontWeight = FontWeight.ExtraBold,
+                            color = remainingColor
+                        )
+                    }
+                    
+                    if (card.totalDue > 0) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        val progress = ((card.totalDue - card.remainingDue) / card.totalDue).toFloat().coerceIn(0f, 1f)
+                        LinearProgressIndicator(
+                            progress = { progress },
+                            modifier = Modifier
+                                .fillMaxWidth(0.8f) // Don't take full width
+                                .height(4.dp),
+                            color = MaterialTheme.colorScheme.primary,
+                            trackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                            strokeCap = androidx.compose.ui.graphics.StrokeCap.Round
                         )
                     }
                 }
