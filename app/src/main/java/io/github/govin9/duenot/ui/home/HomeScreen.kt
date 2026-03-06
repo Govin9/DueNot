@@ -1,4 +1,4 @@
-﻿package io.github.govin9.duenot.ui.home
+package io.github.govin9.duenot.ui.home
 
 import android.widget.Toast
 import androidx.compose.foundation.clickable
@@ -331,7 +331,7 @@ fun HomeScreen(
                             label = { Text("All") },
                             colors = androidx.compose.material3.FilterChipDefaults.filterChipColors(
                                 selectedContainerColor = MaterialTheme.colorScheme.secondary,
-                                selectedLabelColor = MaterialTheme.colorScheme.primary
+                                selectedLabelColor = MaterialTheme.colorScheme.onSecondary
                             )
                         )
                         FilterChip(
@@ -340,7 +340,7 @@ fun HomeScreen(
                             label = { Text("Paid") },
                             colors = androidx.compose.material3.FilterChipDefaults.filterChipColors(
                                 selectedContainerColor = MaterialTheme.colorScheme.secondary,
-                                selectedLabelColor = MaterialTheme.colorScheme.primary
+                                selectedLabelColor = MaterialTheme.colorScheme.onSecondary
                             )
                         )
                         FilterChip(
@@ -349,7 +349,7 @@ fun HomeScreen(
                             label = { Text("Overdue") },
                             colors = androidx.compose.material3.FilterChipDefaults.filterChipColors(
                                 selectedContainerColor = MaterialTheme.colorScheme.secondary,
-                                selectedLabelColor = MaterialTheme.colorScheme.primary
+                                selectedLabelColor = MaterialTheme.colorScheme.onSecondary
                             )
                         )
                         FilterChip(
@@ -358,7 +358,7 @@ fun HomeScreen(
                             label = { Text("New Cards") },
                             colors = androidx.compose.material3.FilterChipDefaults.filterChipColors(
                                 selectedContainerColor = MaterialTheme.colorScheme.secondary,
-                                selectedLabelColor = MaterialTheme.colorScheme.primary
+                                selectedLabelColor = MaterialTheme.colorScheme.onSecondary
                             )
                         )
                         FilterChip(
@@ -367,7 +367,7 @@ fun HomeScreen(
                             label = { Text("Highest Due") },
                             colors = androidx.compose.material3.FilterChipDefaults.filterChipColors(
                                 selectedContainerColor = MaterialTheme.colorScheme.secondary,
-                                selectedLabelColor = MaterialTheme.colorScheme.primary
+                                selectedLabelColor = MaterialTheme.colorScheme.onSecondary
                             )
                         )
                     }
