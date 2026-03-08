@@ -1,4 +1,4 @@
-﻿package io.github.govin9.duenot.ui.history
+package io.github.govin9.duenot.ui.history
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

@@ -83,6 +83,7 @@ fun HomeScreen(
     navController: NavController
 ) {
     val cards by viewModel.allCards.collectAsState()
+    val currencySymbol by viewModel.currencySymbol.collectAsState()
     val context = LocalContext.current
     
     var showPayDialog by remember { mutableStateOf<Card?>(null) }
@@ -92,6 +93,7 @@ fun HomeScreen(
     if (showPayDialog != null) {
         PayDialog(
             card = showPayDialog!!,
+            currencySymbol = currencySymbol,
             onDismiss = { showPayDialog = null },
             onConfirm = { amount, note ->
                 val payment = Payment(
@@ -316,6 +318,7 @@ fun HomeScreen(
                     OverviewCard(
                         totalDue = totalRemainingDue,
                         cardsDueCount = cardsWithDue,
+                        currencySymbol = currencySymbol,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp)
@@ -380,6 +383,7 @@ fun HomeScreen(
                     Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
                         CardItem(
                             card = card,
+                            currencySymbol = currencySymbol,
                             onPayClick = { showPayDialog = card },
                             onHistoryClick = { navController.navigate("card_history/${card.id}") },
                             onEditClick = { navController.navigate("add_edit_card/${card.id}") },
@@ -400,6 +404,7 @@ fun HomeScreen(
 fun OverviewCard(
     totalDue: Double,
     cardsDueCount: Int,
+    currencySymbol: String,
     modifier: Modifier = Modifier
 ) {
     val numberFormat = java.text.NumberFormat.getNumberInstance(Locale("en", "IN"))
@@ -427,7 +432,7 @@ fun OverviewCard(
                     color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
                 )
                 Text(
-                    text = "₹${numberFormat.format(totalDue)}",
+                    text = "$currencySymbol${numberFormat.format(totalDue)}",
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -452,6 +457,7 @@ fun OverviewCard(
 @Composable
 fun CardItem(
     card: Card,
+    currencySymbol: String,
     onPayClick: () -> Unit,
     onHistoryClick: () -> Unit,
     onEditClick: () -> Unit,
@@ -553,7 +559,7 @@ fun CardItem(
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                         )
                         Text(
-                            text = "₹${numberFormat.format(card.totalDue)}",
+                            text = "$currencySymbol${numberFormat.format(card.totalDue)}",
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
@@ -573,7 +579,7 @@ fun CardItem(
                             MaterialTheme.colorScheme.onSurface // Semantic correction: Neutral for debt
                         
                         Text(
-                            text = "₹${numberFormat.format(card.remainingDue)}",
+                            text = "$currencySymbol${numberFormat.format(card.remainingDue)}",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.ExtraBold,
                             color = remainingColor
@@ -684,6 +690,7 @@ fun CardItem(
 @Composable
 fun PayDialog(
     card: Card,
+    currencySymbol: String,
     onDismiss: () -> Unit,
     onConfirm: (Double, String) -> Unit
 ) {
@@ -714,7 +721,7 @@ fun PayDialog(
                     value = amountState,
                     onValueChange = { amountState = it },
                     label = { Text("Amount") },
-                    leadingIcon = { Text("₹", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary) },
+                    leadingIcon = { Text(currencySymbol, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary) },
                     shape = RoundedCornerShape(12.dp),
                     singleLine = true,
                     keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(

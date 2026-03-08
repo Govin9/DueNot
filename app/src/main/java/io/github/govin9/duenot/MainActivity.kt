@@ -1,9 +1,11 @@
-﻿package io.github.govin9.duenot
+package io.github.govin9.duenot
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.collectAsState
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.unit.dp
@@ -38,13 +40,20 @@ import io.github.govin9.duenot.ui.theme.HelloWorldTheme
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels {
-        MainViewModelFactory((application as MainApplication).repository)
+        val app = application as MainApplication
+        MainViewModelFactory(app.repository, app.userPreferencesRepository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            HelloWorldTheme {
+            val themeMode by viewModel.themeMode.collectAsState()
+            val isDark = when(themeMode) {
+                "light" -> false
+                "dark" -> true
+                else -> isSystemInDarkTheme()
+            }
+            HelloWorldTheme(darkTheme = isDark) {
                 MainScreen(viewModel)
             }
         }
@@ -106,7 +115,7 @@ fun MainScreen(viewModel: MainViewModel) {
                 HistoryScreen(viewModel, navController, cardId = -1) // Global History
             }
             composable("settings") {
-                SettingsScreen()
+                SettingsScreen(viewModel, navController)
             }
             composable(
                 route = "add_edit_card/{cardId}",
