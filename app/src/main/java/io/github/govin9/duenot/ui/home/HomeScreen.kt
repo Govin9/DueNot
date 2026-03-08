@@ -297,7 +297,10 @@ fun HomeScreen(
             }
 
             val sortedCards = when (filterOption) {
-                FilterOption.ALL -> filteredCards
+                FilterOption.ALL -> filteredCards.sortedWith(
+                    compareByDescending<Card> { it.remainingDue > 0 }
+                        .thenBy { it.dueDate }
+                )
                 FilterOption.PAID -> filteredCards.filter { it.remainingDue <= 0 }
                 FilterOption.OVERDUE -> filteredCards.filter { it.remainingDue > 0 && isOverdue(it.dueDate) }
                 FilterOption.NEW_CARDS -> filteredCards.sortedByDescending { it.id }
