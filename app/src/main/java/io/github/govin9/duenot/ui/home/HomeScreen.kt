@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -710,6 +711,9 @@ fun PayDialog(
                     value = amountState,
                     onValueChange = { amountState = it },
                     label = { Text("Amount") },
+                    leadingIcon = { Text("₹", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary) },
+                    shape = RoundedCornerShape(12.dp),
+                    singleLine = true,
                     keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
                         keyboardType = androidx.compose.ui.text.input.KeyboardType.Decimal,
                         imeAction = androidx.compose.ui.text.input.ImeAction.Next
@@ -717,13 +721,15 @@ fun PayDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .focusRequester(focusRequester)
-
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
                     value = note,
                     onValueChange = { note = it },
                     label = { Text("Note (Optional)") },
+                    leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
+                    shape = RoundedCornerShape(12.dp),
+                    singleLine = true,
                     keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
                         imeAction = androidx.compose.ui.text.input.ImeAction.Done
                     ),
@@ -794,6 +800,9 @@ fun NewBillDialog(
                     value = amountState,
                     onValueChange = { amountState = it },
                     label = { Text("New Total Bill Amount") },
+                    leadingIcon = { Text("₹", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary) },
+                    shape = RoundedCornerShape(12.dp),
+                    singleLine = true,
                     keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
                         keyboardType = androidx.compose.ui.text.input.KeyboardType.Decimal,
                         imeAction = androidx.compose.ui.text.input.ImeAction.Next
@@ -810,6 +819,8 @@ fun NewBillDialog(
                         onValueChange = { },
                         label = { Text("New Due Date") },
                         readOnly = true,
+                        leadingIcon = { Icon(androidx.compose.material.icons.Icons.Default.DateRange, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
+                        shape = RoundedCornerShape(12.dp),
                         trailingIcon = {
                             IconButton(onClick = { datePickerDialog.show() }) {
                                 Icon(androidx.compose.material.icons.Icons.Default.DateRange, contentDescription = "Select Date")

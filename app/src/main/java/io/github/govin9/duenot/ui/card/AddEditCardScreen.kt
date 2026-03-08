@@ -10,10 +10,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.CreditCard
+import androidx.compose.material.icons.filled.Numbers
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -119,44 +123,56 @@ fun AddEditCardScreen(
                 value = bankName,
                 onValueChange = { bankName = it },
                 label = { Text("Bank Name (e.g. HDFC)") },
+                leadingIcon = { Icon(Icons.Default.AccountBalance, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
+                shape = RoundedCornerShape(12.dp),
+                singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(focusRequester),
                 keyboardOptions = KeyboardOptions(imeAction = androidx.compose.ui.text.input.ImeAction.Next)
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
                 label = { Text("Card Name (e.g. Platinum)") },
+                leadingIcon = { Icon(Icons.Default.CreditCard, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
+                shape = RoundedCornerShape(12.dp),
+                singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(imeAction = androidx.compose.ui.text.input.ImeAction.Next)
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             
             OutlinedTextField(
                 value = last4,
                 onValueChange = { if (it.length <= 4) last4 = it },
                 label = { Text("Last 4 Digits") },
+                leadingIcon = { Icon(Icons.Default.Numbers, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
+                shape = RoundedCornerShape(12.dp),
+                singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = androidx.compose.ui.text.input.ImeAction.Next
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 value = totalDue,
                 onValueChange = { totalDue = it },
                 label = { Text("Total Due Amount") },
+                leadingIcon = { Text("₹", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary) },
+                shape = RoundedCornerShape(12.dp),
+                singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,
                     imeAction = androidx.compose.ui.text.input.ImeAction.Done
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             
             Box(modifier = Modifier.fillMaxWidth()) {
                 OutlinedTextField(
@@ -164,6 +180,8 @@ fun AddEditCardScreen(
                     onValueChange = { },
                     label = { Text("Due Date") },
                     readOnly = true,
+                    leadingIcon = { Icon(Icons.Default.CalendarToday, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
+                    shape = RoundedCornerShape(12.dp),
                     trailingIcon = {
                         IconButton(onClick = { datePickerDialog.show() }) {
                             Icon(Icons.Default.CalendarToday, contentDescription = "Select Date")
@@ -179,7 +197,7 @@ fun AddEditCardScreen(
                 )
             }
             
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
             
             Button(
                 onClick = {
@@ -203,9 +221,15 @@ fun AddEditCardScreen(
                     }
                     navController.popBackStack()
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(16.dp)
             ) {
-                Text(if (cardId == -1) "Add Card" else "Save Changes")
+                Text(
+                    text = if (cardId == -1) "Add Card" else "Save Changes",
+                    style = MaterialTheme.typography.titleMedium
+                )
             }
         }
     }
