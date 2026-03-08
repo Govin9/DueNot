@@ -1,4 +1,4 @@
-﻿package io.github.govin9.duenot.ui.card
+package io.github.govin9.duenot.ui.card
 
 import android.app.DatePickerDialog
 import android.widget.DatePicker
@@ -116,9 +116,9 @@ fun AddEditCardScreen(
                 .padding(16.dp)
         ) {
             OutlinedTextField(
-                value = name,
-                onValueChange = { name = it },
-                label = { Text("Card Name (e.g. Platinum)") },
+                value = bankName,
+                onValueChange = { bankName = it },
+                label = { Text("Bank Name (e.g. HDFC)") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(focusRequester),
@@ -126,9 +126,9 @@ fun AddEditCardScreen(
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
-                value = bankName,
-                onValueChange = { bankName = it },
-                label = { Text("Bank Name (e.g. HDFC)") },
+                value = name,
+                onValueChange = { name = it },
+                label = { Text("Card Name (e.g. Platinum)") },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(imeAction = androidx.compose.ui.text.input.ImeAction.Next)
             )
