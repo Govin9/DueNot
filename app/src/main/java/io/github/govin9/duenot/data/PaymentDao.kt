@@ -1,4 +1,4 @@
-﻿package io.github.govin9.duenot.data
+package io.github.govin9.duenot.data
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -18,4 +18,13 @@ interface PaymentDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPayment(payment: Payment)
+    
+    @Query("SELECT * FROM payments")
+    suspend fun getAllPaymentsSync(): List<Payment>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPayments(payments: List<Payment>)
+    
+    @Query("DELETE FROM payments")
+    suspend fun deleteAllPayments(): Int
 }

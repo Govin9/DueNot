@@ -1,4 +1,4 @@
-﻿package io.github.govin9.duenot.data
+package io.github.govin9.duenot.data
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -12,6 +12,15 @@ import kotlinx.coroutines.flow.Flow
 interface CardDao {
     @Query("SELECT * FROM cards ORDER BY dueDate ASC")
     fun getAllCards(): Flow<List<Card>>
+    
+    @Query("SELECT * FROM cards")
+    suspend fun getAllCardsSync(): List<Card>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCards(cards: List<Card>)
+    
+    @Query("DELETE FROM cards")
+    suspend fun deleteAllCards(): Int
 
     @Query("SELECT * FROM cards WHERE id = :id")
     suspend fun getCardById(id: Int): Card?
