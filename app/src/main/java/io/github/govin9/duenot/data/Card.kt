@@ -1,9 +1,11 @@
-﻿package io.github.govin9.duenot.data
+package io.github.govin9.duenot.data
 
+import androidx.annotation.Keep
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Date
 
+@Keep
 @Entity(tableName = "cards")
 data class Card(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,

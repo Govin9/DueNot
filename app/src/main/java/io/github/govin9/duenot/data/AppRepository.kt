@@ -44,6 +44,7 @@ class AppRepository(private val cardDao: CardDao, private val paymentDao: Paymen
     }
 }
 
+@androidx.annotation.Keep
 data class BackupData(
     val cards: List<Card> = emptyList(),
     val payments: List<Payment> = emptyList()

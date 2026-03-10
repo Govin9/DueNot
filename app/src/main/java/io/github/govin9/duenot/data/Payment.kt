@@ -1,9 +1,11 @@
-﻿package io.github.govin9.duenot.data
+package io.github.govin9.duenot.data
 
+import androidx.annotation.Keep
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
+@Keep
 @Entity(
     tableName = "payments",
     foreignKeys = [
@@ -25,6 +27,7 @@ data class Payment(
     val type: PaymentType = PaymentType.PAYMENT // Default to PAYMENT for backward compatibility
 )
 
+@Keep
 enum class PaymentType {
     PAYMENT,
     BILL_GENERATED
