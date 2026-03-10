@@ -1,8 +1,24 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
 }
+
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
+val keyAliasVal = System.getenv("KEY_ALIAS") ?: keystoreProperties.getProperty("keyAlias")
+val keyPasswordVal = System.getenv("KEY_PASSWORD") ?: keystoreProperties.getProperty("keyPassword")
+val storePasswordVal = System.getenv("KEYSTORE_PASSWORD") ?: keystoreProperties.getProperty("storePassword")
+val storeFileVal = System.getenv("KEYSTORE_FILE") ?: keystoreProperties.getProperty("storeFile")
+
+val isSigningConfigValid = keyAliasVal != null && keyPasswordVal != null && storePasswordVal != null && storeFileVal != null
 
 android {
     namespace = "io.github.govin9.duenot"
@@ -21,6 +37,17 @@ android {
         }
     }
 
+    if (isSigningConfigValid) {
+        signingConfigs {
+            create("release") {
+                keyAlias = keyAliasVal as String
+                keyPassword = keyPasswordVal as String
+                storePassword = storePasswordVal as String
+                storeFile = file(storeFileVal as String)
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -29,6 +56,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            if (isSigningConfigValid) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
     compileOptions {
