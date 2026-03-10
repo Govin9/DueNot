@@ -257,7 +257,7 @@ fun HomeScreen(
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "Welcome! \uD83D\uDC4B", // Waving Hand Emoji
+                    text = "Welcome!", // Removed waving hand emoji
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onBackground,
