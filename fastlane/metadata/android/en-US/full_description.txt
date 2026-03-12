@@ -1,6 +1,7 @@
 DueNot is a robust, offline-first credit card bill management and reminder application designed to help you stay on top of your finances without compromising your privacy.
 
 Features:
+
 • Clean and Modern UI: An intuitive interface designed with Jetpack Compose for a seamless user experience.
 • Manage Your Cards: Easily add, edit, and delete your credit cards. Keep track of all your cards in one unified dashboard.
 • Payment Tracking: Record your payments, whether full or partial, and view your complete payment history.
