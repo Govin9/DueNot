@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
@@ -60,6 +61,7 @@ fun AddEditCardScreen(
     var last4 by remember { mutableStateOf("") }
     var totalDue by remember { mutableStateOf("") }
     var dueDate by remember { mutableStateOf(System.currentTimeMillis()) }
+    val currencySymbol by viewModel.currencySymbol.collectAsState()
     
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
@@ -163,7 +165,7 @@ fun AddEditCardScreen(
                 value = totalDue,
                 onValueChange = { totalDue = it },
                 label = { Text("Total Due Amount") },
-                leadingIcon = { Text("₹", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary) },
+                leadingIcon = { Text(currencySymbol, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary) },
                 shape = RoundedCornerShape(12.dp),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
@@ -182,11 +184,6 @@ fun AddEditCardScreen(
                     readOnly = true,
                     leadingIcon = { Icon(Icons.Default.CalendarToday, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
                     shape = RoundedCornerShape(12.dp),
-                    trailingIcon = {
-                        IconButton(onClick = { datePickerDialog.show() }) {
-                            Icon(Icons.Default.CalendarToday, contentDescription = "Select Date")
-                        }
-                    },
                     modifier = Modifier.fillMaxWidth()
                 )
                 // Transparent box to capture clicks over the text field

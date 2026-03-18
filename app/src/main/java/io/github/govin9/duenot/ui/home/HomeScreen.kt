@@ -112,6 +112,7 @@ fun HomeScreen(
     if (showNewBillDialog != null) {
         NewBillDialog(
             card = showNewBillDialog!!,
+            currencySymbol = currencySymbol,
             onDismiss = { showNewBillDialog = null },
             onConfirm = { newAmount, newDate ->
                 viewModel.recordNewBill(showNewBillDialog!!, newAmount, newDate)
@@ -766,6 +767,7 @@ fun PayDialog(
 @Composable
 fun NewBillDialog(
     card: Card,
+    currencySymbol: String,
     onDismiss: () -> Unit,
     onConfirm: (Double, Long) -> Unit
 ) {
@@ -810,7 +812,7 @@ fun NewBillDialog(
                     value = amountState,
                     onValueChange = { amountState = it },
                     label = { Text("New Total Bill Amount") },
-                    leadingIcon = { Text("₹", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary) },
+                    leadingIcon = { Text(currencySymbol, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary) },
                     shape = RoundedCornerShape(12.dp),
                     singleLine = true,
                     keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
@@ -831,11 +833,6 @@ fun NewBillDialog(
                         readOnly = true,
                         leadingIcon = { Icon(androidx.compose.material.icons.Icons.Default.DateRange, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
                         shape = RoundedCornerShape(12.dp),
-                        trailingIcon = {
-                            IconButton(onClick = { datePickerDialog.show() }) {
-                                Icon(androidx.compose.material.icons.Icons.Default.DateRange, contentDescription = "Select Date")
-                            }
-                        },
                         modifier = Modifier.fillMaxWidth()
                     )
                     Box(

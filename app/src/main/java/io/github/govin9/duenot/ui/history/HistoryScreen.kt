@@ -46,6 +46,7 @@ fun HistoryScreen(
     } else {
         viewModel.getCardPayments(cardId).collectAsState()
     }
+    val currencySymbol by viewModel.currencySymbol.collectAsState()
     
     val title = if (cardId == -1) "Global History" else "Payment History"
 
@@ -109,7 +110,7 @@ fun HistoryScreen(
                                 val isBill = item.payment.type == io.github.govin9.duenot.data.PaymentType.BILL_GENERATED
                                 val amountPrefix = if (isBill) "Bill: " else "Paid "
                                 Text(
-                                    text = "$amountPrefix₹${item.payment.amount}",
+                                    text = "$amountPrefix$currencySymbol${item.payment.amount}",
                                     style = MaterialTheme.typography.titleMedium,
                                     color = if (isBill) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
                                 )
