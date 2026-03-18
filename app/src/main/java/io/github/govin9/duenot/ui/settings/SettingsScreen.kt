@@ -173,10 +173,18 @@ fun SettingsScreen(viewModel: MainViewModel, navController: NavController) {
             // About Section
             SettingsSectionHeader("About")
 
+            val versionName = remember(context) {
+                try {
+                    context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "Unknown"
+                } catch (e: Exception) {
+                    "Unknown"
+                }
+            }
+
             SettingsActionItem(
                 icon = Icons.Default.Info,
                 title = "App Version",
-                subtitle = "1.0.0",
+                subtitle = versionName,
                 onClick = { /* No action needed */ }
             )
 
