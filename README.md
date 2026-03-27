@@ -1,5 +1,5 @@
 <div align="center">
-  <!-- <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="128" alt="DueNot Logo"/> -->
+  <img src="fastlane/metadata/android/en-US/images/icon.png" width="128" alt="DueNot Logo"/>
   <h1>DueNot</h1>
   <p><b>A modern, offline-first credit card bill management and reminder app for Android.</b></p>
 </div>
@@ -36,7 +36,16 @@ Built with modern Android development practices, DueNot ensures a seamless and r
 - **🛡️ Free & Open Source:** Complete transparency. You can view the source code, verify its security, and contribute to the project.
 
 ## 📸 Screenshots
-*(Coming Soon)*
+<table align="center">
+  <tr>
+    <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpeg" width="300" alt="Screenshot 1"/></td>
+    <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpeg" width="300" alt="Screenshot 2"/></td>
+  </tr>
+  <tr>
+    <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.jpeg" width="300" alt="Screenshot 3"/></td>
+    <td><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.jpeg" width="300" alt="Screenshot 4"/></td>
+  </tr>
+</table>
 
 ## 🛠️ Tech Stack & Architecture
 
