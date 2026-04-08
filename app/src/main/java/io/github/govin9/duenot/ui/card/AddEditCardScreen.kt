@@ -48,6 +48,7 @@ import java.util.Date
 import java.util.Locale
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import io.github.govin9.duenot.util.CurrencyUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,7 +74,7 @@ fun AddEditCardScreen(
                 name = it.name
                 bankName = it.bankName
                 last4 = it.cardNumberLast4
-                totalDue = it.totalDue.toString()
+                totalDue = CurrencyUtils.formatAmount(it.totalDue)
                 dueDate = it.dueDate
             }
         }

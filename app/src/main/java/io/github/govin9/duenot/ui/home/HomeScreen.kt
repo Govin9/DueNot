@@ -72,6 +72,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
+import io.github.govin9.duenot.util.CurrencyUtils
 import androidx.compose.material3.FilterChip
 
 enum class FilterOption { ALL, PAID, OVERDUE, NEW_CARDS, HIGHEST_DUE }
@@ -408,7 +409,6 @@ fun OverviewCard(
     currencySymbol: String,
     modifier: Modifier = Modifier
 ) {
-    val numberFormat = java.text.NumberFormat.getNumberInstance(Locale("en", "IN"))
 
     Card(
         modifier = modifier,
@@ -433,7 +433,7 @@ fun OverviewCard(
                     color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
                 )
                 Text(
-                    text = "$currencySymbol${numberFormat.format(totalDue)}",
+                    text = "$currencySymbol${CurrencyUtils.formatAmount(totalDue)}",
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -466,7 +466,6 @@ fun CardItem(
     onNewBillClick: () -> Unit
 ) {
     val dateFormat = SimpleDateFormat("dd MMM", Locale.getDefault())
-    val numberFormat = java.text.NumberFormat.getNumberInstance(Locale("en", "IN"))
 
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
@@ -560,7 +559,7 @@ fun CardItem(
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                         )
                         Text(
-                            text = "$currencySymbol${numberFormat.format(card.totalDue)}",
+                            text = "$currencySymbol${CurrencyUtils.formatAmount(card.totalDue)}",
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
@@ -580,7 +579,7 @@ fun CardItem(
                             MaterialTheme.colorScheme.onSurface // Semantic correction: Neutral for debt
                         
                         Text(
-                            text = "$currencySymbol${numberFormat.format(card.remainingDue)}",
+                            text = "$currencySymbol${CurrencyUtils.formatAmount(card.remainingDue)}",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.ExtraBold,
                             color = remainingColor
@@ -697,7 +696,7 @@ fun PayDialog(
 ) {
     // Initialize with selection covering the whole text
     var amountState by remember { 
-        val text = card.remainingDue.toString()
+        val text = CurrencyUtils.formatAmount(card.remainingDue)
         mutableStateOf(
             androidx.compose.ui.text.input.TextFieldValue(
                 text = text,

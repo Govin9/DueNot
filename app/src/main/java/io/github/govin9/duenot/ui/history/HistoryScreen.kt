@@ -33,6 +33,7 @@ import io.github.govin9.duenot.ui.MainViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import io.github.govin9.duenot.util.CurrencyUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -110,7 +111,7 @@ fun HistoryScreen(
                                 val isBill = item.payment.type == io.github.govin9.duenot.data.PaymentType.BILL_GENERATED
                                 val amountPrefix = if (isBill) "Bill: " else "Paid "
                                 Text(
-                                    text = "$amountPrefix$currencySymbol${item.payment.amount}",
+                                    text = "$amountPrefix$currencySymbol${CurrencyUtils.formatAmount(item.payment.amount)}",
                                     style = MaterialTheme.typography.titleMedium,
                                     color = if (isBill) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
                                 )
