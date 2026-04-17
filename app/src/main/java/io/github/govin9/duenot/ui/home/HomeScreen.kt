@@ -85,6 +85,7 @@ fun HomeScreen(
 ) {
     val cards by viewModel.allCards.collectAsState()
     val currencySymbol by viewModel.currencySymbol.collectAsState()
+    val dateFormatString by viewModel.dateFormat.collectAsState()
     val context = LocalContext.current
     
     var showPayDialog by remember { mutableStateOf<Card?>(null) }
@@ -114,6 +115,7 @@ fun HomeScreen(
         NewBillDialog(
             card = showNewBillDialog!!,
             currencySymbol = currencySymbol,
+            dateFormatString = dateFormatString,
             onDismiss = { showNewBillDialog = null },
             onConfirm = { newAmount, newDate ->
                 viewModel.recordNewBill(showNewBillDialog!!, newAmount, newDate)
@@ -386,6 +388,7 @@ fun HomeScreen(
                         CardItem(
                             card = card,
                             currencySymbol = currencySymbol,
+                            dateFormatString = dateFormatString,
                             onPayClick = { showPayDialog = card },
                             onHistoryClick = { navController.navigate("card_history/${card.id}") },
                             onEditClick = { navController.navigate("add_edit_card/${card.id}") },
@@ -459,13 +462,15 @@ fun OverviewCard(
 fun CardItem(
     card: Card,
     currencySymbol: String,
+    dateFormatString: String,
     onPayClick: () -> Unit,
     onHistoryClick: () -> Unit,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onNewBillClick: () -> Unit
 ) {
-    val dateFormat = SimpleDateFormat("dd MMM", Locale.getDefault())
+    val displayFormat = if (dateFormatString == "MM/dd/yyyy") "MMM dd" else "dd MMM"
+    val dateFormat = SimpleDateFormat(displayFormat, Locale.getDefault())
 
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
@@ -767,6 +772,7 @@ fun PayDialog(
 fun NewBillDialog(
     card: Card,
     currencySymbol: String,
+    dateFormatString: String,
     onDismiss: () -> Unit,
     onConfirm: (Double, Long) -> Unit
 ) {
@@ -794,7 +800,7 @@ fun NewBillDialog(
         calendar.get(java.util.Calendar.DAY_OF_MONTH)
     )
     
-    val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    val dateFormat = SimpleDateFormat(dateFormatString, Locale.getDefault())
     
     val focusRequester = remember { androidx.compose.ui.focus.FocusRequester() }
 

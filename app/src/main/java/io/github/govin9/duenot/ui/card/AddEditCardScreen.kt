@@ -63,6 +63,7 @@ fun AddEditCardScreen(
     var totalDue by remember { mutableStateOf("") }
     var dueDate by remember { mutableStateOf(System.currentTimeMillis()) }
     val currencySymbol by viewModel.currencySymbol.collectAsState()
+    val dateFormatString by viewModel.dateFormat.collectAsState()
     
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
@@ -91,7 +92,7 @@ fun AddEditCardScreen(
         calendar.get(Calendar.DAY_OF_MONTH)
     )
     
-    val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    val dateFormat = SimpleDateFormat(dateFormatString, Locale.getDefault())
 
     val focusRequester = remember { androidx.compose.ui.focus.FocusRequester() }
 

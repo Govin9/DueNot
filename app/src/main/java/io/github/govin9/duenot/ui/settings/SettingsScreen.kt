@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.FileUpload
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.DateRange
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
@@ -42,6 +43,7 @@ fun SettingsScreen(viewModel: MainViewModel, navController: NavController) {
     val currencySymbol by viewModel.currencySymbol.collectAsState()
     val reminderDays by viewModel.reminderDaysBefore.collectAsState()
     val reminderTime by viewModel.reminderTime.collectAsState()
+    val dateFormat by viewModel.dateFormat.collectAsState()
 
     // --- Backup & Restore Launchers ---
     val exportLauncher = rememberLauncherForActivityResult(
@@ -128,6 +130,13 @@ fun SettingsScreen(viewModel: MainViewModel, navController: NavController) {
             CurrencySettingItem(
                 currentCurrency = currencySymbol,
                 onCurrencySelected = { viewModel.setCurrencySymbol(it) }
+            )
+
+            Divider(modifier = Modifier.padding(horizontal = 16.dp))
+
+            DateFormatSettingItem(
+                currentFormat = dateFormat,
+                onFormatSelected = { viewModel.setDateFormat(it) }
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -501,3 +510,62 @@ fun ReminderTimeSettingItem(currentTime: String, onTimeSelected: (String) -> Uni
         }
     }
 }
+
+@Composable
+fun DateFormatSettingItem(currentFormat: String, onFormatSelected: (String) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    val options = listOf("dd/MM/yyyy" to "DD/MM/YYYY (e.g. 31/12/2026)", "MM/dd/yyyy" to "MM/DD/YYYY (e.g. 12/31/2026)")
+    val currentLabel = options.find { it.first == currentFormat }?.second ?: "DD/MM/YYYY (e.g. 31/12/2026)"
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { expanded = true }
+            .padding(horizontal = 16.dp, vertical = 16.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Default.DateRange, 
+                    contentDescription = "Date Format",
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Column {
+                    Text(text = "Date Format", style = MaterialTheme.typography.bodyLarge)
+                    Text(
+                        text = currentLabel, 
+                        style = MaterialTheme.typography.bodyMedium, 
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            Icon(Icons.Default.ArrowDropDown, contentDescription = "Select Date Format")
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            options.forEach { (key, label) ->
+                DropdownMenuItem(
+                    text = { Text(label) },
+                    onClick = {
+                        onFormatSelected(key)
+                        expanded = false
+                    },
+                    trailingIcon = {
+                        if (currentFormat == key) {
+                            Icon(Icons.Default.Check, contentDescription = "Selected")
+                        }
+                    }
+                )
+            }
+        }
+    }
+}
+

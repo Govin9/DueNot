@@ -34,6 +34,9 @@ class MainViewModel(
     val reminderTime: StateFlow<String> = userPreferencesRepository.reminderTimeFlow
         .stateIn(viewModelScope, SharingStarted.Lazily, "09:00")
 
+    val dateFormat: StateFlow<String> = userPreferencesRepository.dateFormatFlow
+        .stateIn(viewModelScope, SharingStarted.Lazily, "dd/MM/yyyy")
+
     fun setThemeMode(mode: String) = viewModelScope.launch {
         userPreferencesRepository.setThemeMode(mode)
     }
@@ -48,6 +51,10 @@ class MainViewModel(
 
     fun setReminderTime(time: String) = viewModelScope.launch {
         userPreferencesRepository.setReminderTime(time)
+    }
+
+    fun setDateFormat(format: String) = viewModelScope.launch {
+        userPreferencesRepository.setDateFormat(format)
     }
 
     suspend fun getCardById(id: Int): Card? {
