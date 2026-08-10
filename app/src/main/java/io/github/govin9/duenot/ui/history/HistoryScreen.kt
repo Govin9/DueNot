@@ -48,6 +48,7 @@ fun HistoryScreen(
         viewModel.getCardPayments(cardId).collectAsState()
     }
     val currencySymbol by viewModel.currencySymbol.collectAsState()
+    val dateFormatString by viewModel.dateFormat.collectAsState()
     
     val title = if (cardId == -1) "Global History" else "Payment History"
 
@@ -126,8 +127,9 @@ fun HistoryScreen(
                         },
                         supportingContent = { 
                             Column {
+                                val displayFormat = if (dateFormatString == "MM/dd/yyyy") "MMM dd yyyy, HH:mm" else "dd MMM yyyy, HH:mm"
                                 Text(
-                                    text = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault()).format(Date(item.payment.date)),
+                                    text = SimpleDateFormat(displayFormat, Locale.getDefault()).format(Date(item.payment.date)),
                                     style = MaterialTheme.typography.bodySmall
                                 )
                                 if (!item.payment.note.isNullOrEmpty()) {

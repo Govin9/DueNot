@@ -19,6 +19,7 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
     private val CURRENCY_SYMBOL = stringPreferencesKey("currency_symbol") // "₹", "$", "€", etc.
     private val REMINDER_DAYS_BEFORE = stringPreferencesKey("reminder_days_before") // "1", "2", "3", "0" (on the day)
     private val REMINDER_TIME = stringPreferencesKey("reminder_time") // "09:00", "18:00"
+    private val DATE_FORMAT = stringPreferencesKey("date_format") // "dd/MM/yyyy" or "MM/dd/yyyy"
 
     val themeModeFlow: Flow<String> = dataStore.data.map { preferences ->
         preferences[THEME_MODE] ?: "system"
@@ -34,6 +35,10 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
 
     val reminderTimeFlow: Flow<String> = dataStore.data.map { preferences ->
         preferences[REMINDER_TIME] ?: "09:00" // Default to 9 AM
+    }
+
+    val dateFormatFlow: Flow<String> = dataStore.data.map { preferences ->
+        preferences[DATE_FORMAT] ?: "dd/MM/yyyy"
     }
 
     suspend fun setThemeMode(mode: String) {
@@ -57,6 +62,12 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
     suspend fun setReminderTime(time: String) {
         dataStore.edit { preferences ->
             preferences[REMINDER_TIME] = time
+        }
+    }
+
+    suspend fun setDateFormat(format: String) {
+        dataStore.edit { preferences ->
+            preferences[DATE_FORMAT] = format
         }
     }
 }
